@@ -1,0 +1,7 @@
+---
+
+- name: Create keepalived.conf
+  template:
+    src: "keepalived.conf.j2"
+    dest: "/etc/keepalived/keepalived.conf"
+

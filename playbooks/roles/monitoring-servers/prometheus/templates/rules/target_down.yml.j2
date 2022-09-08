@@ -1,0 +1,11 @@
+groups:
+  - name: targat_down
+    rules:
+      - alert: TargetDown
+        expr: up == 0
+        for: 60s
+        labels:
+          severity: warning
+        annotations:
+          summary: "TargetDown"
+          description: {% raw %}"{{ $labels.job }} is down on {{ $labels.instance }}"{% endraw %}

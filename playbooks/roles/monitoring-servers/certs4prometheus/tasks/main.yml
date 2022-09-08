@@ -1,0 +1,13 @@
+---
+
+- name: Set certs
+  become: yes
+  shell: |
+    mv \
+      ca.crt \
+      prometheus-kube-apiserver-client.pem \
+      prometheus-kube-apiserver-client-key.pem \
+      /etc/prometheus/kubernetes/pki
+    mkdir -p /etc/prometheus/kubernetes/pki
+    chown -R prometheus:prometheus /etc/prometheus/kubernetes/pki
+

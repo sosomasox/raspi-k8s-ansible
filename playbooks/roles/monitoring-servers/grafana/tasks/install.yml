@@ -1,0 +1,27 @@
+---
+
+- name: Update the package list
+  apt:
+    update_cache: "yes"
+
+- name: Install some packages
+  apt:
+    name:
+      - apt-transport-https
+      - software-properties-common
+      - wget
+
+- name: Add repository for stable releases
+  shell: |
+    wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+    echo "deb https://packages.grafana.com/oss/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+
+- name: Update the package list
+  apt:
+    update_cache: "yes"
+
+- name: Install Grafana
+  apt:
+    name:
+      - grafana
+

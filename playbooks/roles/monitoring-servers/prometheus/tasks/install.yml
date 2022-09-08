@@ -1,0 +1,19 @@
+---
+
+- name: Install Prometheus
+  shell: |
+    mkdir -p /etc/prometheus
+    mkdir -p /var/lib/prometheus/data
+    mkdir -p /etc/prometheus/kubernetes/pki
+    chown -R root:prometheus /etc/prometheus
+    chown -R prometheus:prometheus /var/lib/prometheus/data
+    chown -R prometheus:prometheus /etc/prometheus/kubernetes/pki
+    wget https://github.com/prometheus/prometheus/releases/download/v{{ Prometheus.Version }}/prometheus-{{ Prometheus.Version }}.linux-arm64.tar.gz
+    tar -zxvf prometheus-{{ Prometheus.Version }}.linux-arm64.tar.gz
+    cp    prometheus-{{ Prometheus.Version }}.linux-arm64/prometheus         /usr/local/bin/
+    cp    prometheus-{{ Prometheus.Version }}.linux-arm64/promtool           /usr/local/bin/
+    cp -r prometheus-{{ Prometheus.Version }}.linux-arm64/consoles/          /etc/prometheus/
+    cp -r prometheus-{{ Prometheus.Version }}.linux-arm64/console_libraries/ /etc/prometheus/
+    rm -r prometheus-{{ Prometheus.Version }}.linux-arm64
+    rm    prometheus-{{ Prometheus.Version }}.linux-arm64.tar.gz
+

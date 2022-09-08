@@ -1,0 +1,9 @@
+---
+
+- name: Setup k8s-control-planes
+  become: yes
+  hosts:
+    - k8s-control-planes
+  roles:
+    - k8s-control-planes/setup
+

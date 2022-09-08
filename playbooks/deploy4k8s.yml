@@ -1,0 +1,41 @@
+---
+
+- name: kubeadm init
+  become: yes
+  hosts:
+    - k8s-control-planes[0]
+  roles:
+    - k8s-control-planes/kubeadm_init
+
+- name: kubeadm join for k8s-control-planes
+  become: yes
+  hosts:
+    - k8s-control-planes, !k8s-control-planes[0]
+  roles:
+    - k8s-control-planes/kubeadm_join4control-planes
+
+- name: kubeadm join for k8s-nodes
+  become: yes
+  hosts:
+    - k8s-nodes
+  roles:
+    - k8s-nodes/kubeadm_join4nodes
+
+- name: kubectl label & taint
+  hosts:
+    - k8s-control-planes[0]
+  roles:
+    - k8s/kubectl_label-taint
+
+- name: Distribute certs for Prometheus
+  hosts:
+    - k8s-control-planes[0]
+  roles:
+    - k8s/certs4prometheus
+
+- name: Set certs for Prometheus
+  hosts:
+    - monitoring-servers
+  roles:
+    - monitoring-servers/certs4prometheus
+

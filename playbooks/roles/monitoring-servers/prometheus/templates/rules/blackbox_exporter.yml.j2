@@ -1,0 +1,33 @@
+groups:
+  - name: balckbox_exporter/ping
+    rules:
+      - alert: PingNG
+        expr: probe_success{job="blackbox_exporter/ping"} == 0
+        for: 60s
+        labels:
+          severity: critical
+        annotations:
+          summary: "PingNG"
+          description: {% raw %}"Ping NG for {{ $labels.instance }}"{% endraw %}
+
+  - name: balckbox_exporter/ssh
+    rules:
+      - alert: SSHDown
+        expr: probe_success{job="blackbox_exporter/ssh"} == 0
+        for: 60s
+        labels:
+          severity: critical
+        annotations:
+          summary: "SSHDown"
+          description: {% raw %}"SSH Down for {{ $labels.instance }}"{% endraw %}
+
+  - name: balckbox_exporter/http
+    rules:
+      - alert: HTTP200NG
+        expr: probe_success{job="blackbox_exporter/http"} == 0
+        for: 60s
+        labels:
+          severity: critical
+        annotations:
+          summary: "HTTP200NG"
+          description: {% raw %}"HTTP 200 NG for {{ $labels.instance }}"{% endraw %}

@@ -1,0 +1,5 @@
+---
+
+token:         "{{ hostvars[groups['k8s-control-planes'][0]].kube_token.stdout }}"
+ca_cert:       "{{ hostvars[groups['k8s-control-planes'][0]].token_ca_cert.stdout }}"
+

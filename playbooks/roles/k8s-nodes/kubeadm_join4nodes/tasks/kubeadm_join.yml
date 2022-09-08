@@ -1,0 +1,5 @@
+---
+
+- name: Join nodes to cluster
+  shell: "kubeadm join {{ LoadBalancer.Keepalived.VirtualLocalIPAddress }}:{{ LoadBalancer.BindPort }} --token {{ token }} --discovery-token-ca-cert-hash sha256:{{ ca_cert }}"
+

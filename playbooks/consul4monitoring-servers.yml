@@ -1,0 +1,9 @@
+---
+
+- name: Deploy consul
+  become: yes
+  hosts:
+    - monitoring-servers
+  roles:
+    - monitoring-servers/consul
+

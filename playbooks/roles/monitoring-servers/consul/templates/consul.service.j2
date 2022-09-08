@@ -1,0 +1,16 @@
+[Unit]
+Description=Consul server
+Documentation=https://www.consul.io/docs/intro
+After=network-online.target
+
+[Service]
+User=consul
+ExecStart=/usr/local/bin/consul agent -config-dir=/var/lib/consul
+ExecStop=/bin/kill -TERM ${MAINPID}
+ExecReload=/bin/kill -HUP ${MAINPID}
+Restart=on-failure
+KillMode=control-group
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

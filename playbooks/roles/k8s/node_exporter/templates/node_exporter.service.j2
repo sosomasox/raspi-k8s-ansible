@@ -1,0 +1,16 @@
+[Unit]
+Description=Node exporter
+Documentation=https://github.com/prometheus/node_exporter
+After=network-online.target
+
+[Service]
+User=prometheus
+ExecStart=/usr/local/bin/node_exporter
+ExecStop=/bin/kill -TERM ${MAINPID}
+ExecReload=/bin/kill -HUP ${MAINPID}
+Restart=on-failure
+KillMode=control-group
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

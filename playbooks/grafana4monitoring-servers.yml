@@ -1,0 +1,9 @@
+---
+
+- name: Deploy grafana
+  become: yes
+  hosts:
+    - monitoring-servers
+  roles:
+    - monitoring-servers/grafana
+

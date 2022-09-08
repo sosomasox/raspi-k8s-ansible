@@ -1,0 +1,138 @@
+# my global config
+global:
+  scrape_interval: 15s # Set the scrape interval to every 30 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  scrape_timeout: 5s # scrape_timeout is set to the global default (10s).
+  external_labels:
+    env: {{ Environment }}
+
+
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+      - targets:
+{% for server in groups['monitoring-servers'] %}
+        - "{{ hostvars[server]['ansible_host'] }}:9093"
+{% endfor %}
+
+
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  - "rules/*.yml"
+  - "rules/*.yaml"
+
+
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: prometheus
+    scrape_interval: 5s
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+    #
+    static_configs:
+      - targets: 
+{% for server in groups['monitoring-servers'] %}
+        - "{{ server }}:9090"
+{% endfor %}
+
+
+  - job_name: "node_exporter"
+    scrape_interval: 5s
+    consul_sd_configs:
+      - server: "localhost:8500"
+        services:
+          - "node_exporter"
+    relabel_configs:
+      - source_labels: [__meta_consul_node, __meta_consul_service_port]
+        separator: ':'
+        target_label: __address__
+      - source_labels: [__meta_consul_node]
+        target_label: instance
+
+
+  - job_name: blackbox_exporter/ping
+    scrape_interval: 5s
+    metrics_path: /probe
+    params:
+      module: [ping]
+    consul_sd_configs:
+      - server: "localhost:8500"
+        services:
+          - "blackbox_exporter-ping"
+    static_configs:
+      - targets:
+        - "{{ MonitoringServer.Keepalibed.VirtualLocalIPAddress }}"
+{% for server in groups['monitoring-servers'] %}
+        - "{{ server }}"
+{% endfor %}
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__meta_consul_tags]
+        regex: .*,ping:([^,]+),.*
+        replacement: ${1}
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: {{ inventory_hostname }}:9115
+
+
+  - job_name: blackbox_exporter/ssh
+    scrape_interval: 5s
+    metrics_path: /probe
+    params:
+      module: [ssh]
+    consul_sd_configs:
+      - server: "localhost:8500"
+        services:
+          - "blackbox_exporter-ssh"
+    static_configs:
+      - targets:
+{% for server in groups['monitoring-servers'] %}
+        - "{{ server }}:22"
+{% endfor %}
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__meta_consul_tags]
+        regex: .*,ssh:([^,]+),.*
+        replacement: ${1}:22
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: {{ inventory_hostname }}:9115
+
+
+  - job_name: blackbox_exporter/http
+    scrape_interval: 5s
+    metrics_path: /probe
+    params:
+      module: [http_200]
+    static_configs:
+      - targets:
+        - "https://{{ LoadBalancer.Keepalived.VirtualLocalIPAddress }}:{{ LoadBalancer.BindPort }}/livez"
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: {{ inventory_hostname }}:9115
+
+  - job_name: traefik/metrics
+    scrape_interval: 5s
+    metrics_path: /metrics
+    scheme: https
+    static_configs:
+      - targets:
+        - "traefik.home.arpa"
+

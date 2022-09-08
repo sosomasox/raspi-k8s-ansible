@@ -1,0 +1,29 @@
+Environment: raspi-k8s
+Kubernetes:
+  Version: 1.24.3                         # インストールするKubernetesのバージョンを指定
+  PodNetworkCIDR: 10.244.0.0/16           # Pod NetworkのCIDRを指定
+  NodeNetworkCIDR: 192.168.114.0/24       # Node NetworkのCIDRを指定
+  ClusterName: raspi-k8s                  # Kubernetessクラスタの名前を指定
+MonitoringServer:
+  Keepalibed:
+    VirtualLocalIPAddress: 192.168.111.10 # 監視サーバのVIPを指定
+LoadBalancer:
+  Hostname: k8s-control-plane.home.arpa   # ロードバランサのホスト名を指定
+  BindPort: 64430                         # ロードバランサのポートを指定
+  Keepalived:
+    VirtualLocalIPAddress: 192.168.114.10 # K8s Node Network側kube-apiserver用ロードバランサのVIPを指定
+Consul:
+  Version: 1.12.3
+Prometheus:
+  Version: 2.37.0
+  BaseURL: https://prometheus.home.arpa
+Alertmanager:
+  Version: 0.24.0
+  BaseURL: https://alertmanager.home.arpa
+BlackboxExporter:
+  Version: 0.21.1
+NodeExporter:
+  Version: 1.3.1
+Slack:
+  Alert:
+    WebhookURL: https://hooks.slack.com/services/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 # アラート通知用SlackチャンネルのWebhook URL

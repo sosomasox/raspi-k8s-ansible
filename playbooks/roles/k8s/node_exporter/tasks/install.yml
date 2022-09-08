@@ -1,0 +1,10 @@
+---
+
+- name: Install node_exporter
+  shell: |
+    wget https://github.com/prometheus/node_exporter/releases/download/v{{ NodeExporter.Version }}/node_exporter-{{ NodeExporter.Version }}.linux-arm64.tar.gz
+    tar -xzvf node_exporter-{{ NodeExporter.Version }}.linux-arm64.tar.gz
+    cp node_exporter-{{ NodeExporter.Version }}.linux-arm64/node_exporter /usr/local/bin/
+    rm -r node_exporter-{{ NodeExporter.Version }}.linux-arm64
+    rm node_exporter-{{ NodeExporter.Version }}.linux-arm64.tar.gz
+

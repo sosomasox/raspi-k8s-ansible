@@ -1,0 +1,9 @@
+---
+
+- name: Deploy blackbox_exporter
+  become: yes
+  hosts:
+    - monitoring-servers
+  roles:
+    - monitoring-servers/blackbox_exporter
+

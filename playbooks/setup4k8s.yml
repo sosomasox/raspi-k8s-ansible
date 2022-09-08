@@ -1,0 +1,35 @@
+---
+
+- name: Initial Setup
+  become: yes
+  hosts: 
+    - k8s-loadbalancers
+    - k8s-control-planes
+    - k8s-nodes
+  roles:
+    - k8s/setup
+
+- name: Setup ssh-key
+  become: no
+  hosts: 
+    - k8s-loadbalancers
+    - k8s-control-planes
+    - k8s-nodes
+  roles:
+    - k8s/ssh-key
+
+- name: Setup for k8s-loadbalancers
+  import_playbook: setup4k8s-loadbalancers.yml
+
+- name: Setup for k8s-contol-planes
+  import_playbook: setup4k8s-contol-planes.yml
+
+- name: Setup for k8s-nodes
+  import_playbook: setup4k8s-nodes.yml
+
+- name: Setup consul
+  import_playbook: consul4k8s.yml
+
+- name: Setup node_exporter
+  import_playbook: node_exporter4k8s.yml
+

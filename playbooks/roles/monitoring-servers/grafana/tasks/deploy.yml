@@ -1,0 +1,37 @@
+---
+
+- name: Create grafana.ini
+  template:
+    src: "grafana.ini"
+    dest: "/etc/grafana/"
+
+- name: Create datasources
+  template:
+    src: "datasources/prometheus.yaml"
+    dest: "/etc/grafana/provisioning/datasources/"
+
+- name: Create dashboards
+  template:
+    src: "dashboards/node_exporter.yaml"
+    dest: "/etc/grafana/provisioning/dashboards/"
+
+- name: Create /var/lib/grafana/dashboards
+  shell: |
+    mkdir -p /var/lib/grafana/dashboards
+
+- name: Create dashboard json files
+  template:
+    src: "node_exporter.json"
+    dest: "/var/lib/grafana/dashboards/"
+
+- name: Execute chown -R root:grafana var/lib/grafana/dashboards/
+  shell: |
+    chown -R root:grafana /var/lib/grafana/dashboards/
+
+- name: Restart Grafana
+  systemd:
+    name: grafana-server
+    daemon_reload: yes
+    enabled: yes
+    state: restarted
+

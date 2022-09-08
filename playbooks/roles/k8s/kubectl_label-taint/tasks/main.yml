@@ -1,0 +1,8 @@
+---
+
+- name: Execute kubectl lable node for k8s-nodes
+  shell: |
+    kubectl label node {{ item }} node-role.kubernetes.io/node=''
+  with_items:
+    - "{{ groups['k8s-nodes'] }}"
+

@@ -1,0 +1,29 @@
+---
+
+- name: Create consul.json
+  template:
+    src: "consul.json.j2"
+    dest: "/var/lib/consul/consul.json"
+
+- name: Create service
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - { src: "services/node_exporter.json.j2", dest: "/var/lib/consul/node_exporter.json" }
+    - { src: "services/blackbox_exporter-ping.json.j2", dest: "/var/lib/consul/blackbox_exporter-ping.json" }
+    - { src: "services/blackbox_exporter-ssh.json.j2", dest: "/var/lib/consul/blackbox_exporter-ssh.json" }
+
+- name: Create consul.service
+  template:
+    src: "consul.service.j2"
+    dest: "/etc/systemd/system/consul.service"
+
+- name: Deploy consul
+  shell: |
+    mkdir -p /var/lib/consul/data
+    chown -R consul:consul /var/lib/consul/data
+    systemctl daemon-reload
+    systemctl enable  consul.service
+    systemctl restart consul.service
+

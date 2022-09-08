@@ -1,0 +1,6 @@
+---
+
+- include: kubeadm_init.yml
+- include: create_certs-key.yml
+- include: create_token.yml
+

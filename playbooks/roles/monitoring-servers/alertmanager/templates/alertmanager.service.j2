@@ -1,0 +1,24 @@
+[Unit]
+Description=Alertmanager
+Documentation=https://github.com/prometheus/alertmanager
+After=network-online.target
+
+[Service]
+User=prometheus
+ExecStart=/usr/local/bin/alertmanager \
+    --config.file="/etc/prometheus/alertmanager/alertmanager.yml" \
+    --cluster.advertise-address="{{ hostvars[inventory_hostname]['ansible_host'] }}:9094" \
+{% for server in groups['monitoring-servers'] %}
+{% if hostvars[server]['ansible_host'] != hostvars[inventory_hostname]['ansible_host'] %}
+    --cluster.peer="{{ hostvars[server]['ansible_host'] }}:9094" \
+{% endif %}
+{% endfor %}
+    --storage.path="/var/lib/prometheus/alertmanager/data/"
+ExecStop=/bin/kill -TERM ${MAINPID}
+ExecReload=/bin/kill -HUP ${MAINPID}
+Restart=on-failure
+KillMode=control-group
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

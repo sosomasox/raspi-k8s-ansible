@@ -1,0 +1,22 @@
+---
+
+- name: Join control-planes to cluster
+  shell: "kubeadm join {{ LoadBalancer.Keepalived.VirtualLocalIPAddress }}:{{ LoadBalancer.BindPort }} --token {{ token }} --discovery-token-ca-cert-hash sha256:{{ ca_cert }} --control-plane --certificate-key {{ cert_key }}"
+
+- name: Create $HOME/.kube directory
+  file:
+    path: "/home/{{ ansible_env.SUDO_USER }}/.kube/"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_env.SUDO_USER }}"
+    group: "{{ ansible_env.SUDO_USER }}"
+
+- name: Copy admin.conf to $HOME/.kube/config
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "/home/{{ ansible_env.SUDO_USER }}/.kube/config"
+    owner: "{{ ansible_env.SUDO_USER }}"
+    group: "{{ ansible_env.SUDO_USER }}"
+    mode: '0600'
+    remote_src: true
+

@@ -1,0 +1,6 @@
+---
+
+- include: setup.yml
+- include: install.yml
+- include: deploy.yml
+

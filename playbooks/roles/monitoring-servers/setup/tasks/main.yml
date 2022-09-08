@@ -1,0 +1,7 @@
+---
+
+- include: initial_setup.yml
+- include: install_packages.yml
+- include: create_config.yml
+- include: restart_systemd.yml
+

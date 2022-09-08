@@ -1,0 +1,11 @@
+---
+
+- name: Install Alertmanager
+  shell: |
+    wget https://github.com/prometheus/alertmanager/releases/download/v{{ Alertmanager.Version }}/alertmanager-{{ Alertmanager.Version }}.linux-arm64.tar.gz
+    tar -zxvf alertmanager-{{ Alertmanager.Version }}.linux-arm64.tar.gz
+    cp alertmanager-{{ Alertmanager.Version }}.linux-arm64/alertmanager /usr/local/bin
+    cp alertmanager-{{ Alertmanager.Version }}.linux-arm64/amtool       /usr/local/bin
+    rm -r alertmanager-{{ Alertmanager.Version }}.linux-arm64
+    rm alertmanager-{{ Alertmanager.Version }}.linux-arm64.tar.gz
+

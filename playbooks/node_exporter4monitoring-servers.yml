@@ -1,0 +1,9 @@
+---
+
+- name: Deploy node_exporter
+  become: yes
+  hosts:
+    - monitoring-servers
+  roles:
+    - monitoring-servers/node_exporter
+

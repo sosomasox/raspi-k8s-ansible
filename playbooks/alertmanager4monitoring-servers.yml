@@ -1,0 +1,9 @@
+---
+
+- name: Deploy alertmanager
+  become: yes
+  hosts:
+    - monitoring-servers
+  roles:
+    - monitoring-servers/alertmanager
+

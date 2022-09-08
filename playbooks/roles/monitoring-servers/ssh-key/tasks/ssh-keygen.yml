@@ -1,0 +1,7 @@
+---
+
+- name: Execute ssh-keygen
+  ignore_errors: yes
+  shell: |
+    bash -c "ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa <<< n"
+

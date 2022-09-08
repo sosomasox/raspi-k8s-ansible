@@ -1,0 +1,28 @@
+modules:
+  ping:
+    prober: icmp
+    timeout: 5s
+    icmp:
+      preferred_ip_protocol: "ip4"
+  ssh:
+    prober: tcp
+    timeout: 5s
+    tcp:
+      query_response:
+      - expect: "^SSH-2.0-"
+      - send: "SSH-2.0-blackbox_exporter-ssh-check"
+  http_2xx:
+    prober: http
+    timeout: 5s
+    http:
+      preferred_ip_protocol: "ip4"
+  http_200:
+    prober: http
+    timeout: 5s
+    http:
+      valid_status_codes: [200]
+      preferred_ip_protocol: "ip4"
+      tls_config:
+        ca_file: /etc/prometheus/kubernetes/pki/ca.crt
+        cert_file: /etc/prometheus/kubernetes/pki/prometheus-kube-apiserver-client.pem
+        key_file: /etc/prometheus/kubernetes/pki/prometheus-kube-apiserver-client-key.pem

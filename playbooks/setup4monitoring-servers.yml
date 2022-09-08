@@ -1,0 +1,34 @@
+---
+
+- name: Inital Setup for monitoring-servers
+  become: yes
+  hosts:
+    - monitoring-servers
+  roles:
+    - monitoring-servers/setup
+
+- name: Setup ssh-key
+  become: no
+  hosts:
+    - monitoring-servers
+  roles:
+    - monitoring-servers/ssh-key
+
+- name: Setup Grafana
+  import_playbook: grafana4monitoring-servers.yml
+
+- name: Setup Consul
+  import_playbook: consul4monitoring-servers.yml
+
+- name: Setup Prometheus
+  import_playbook: prometheus4monitoring-servers.yml
+
+- name: Setup Alertmanager
+  import_playbook: alertmanager4monitoring-servers.yml
+
+- name: Setup blackbox_exporter
+  import_playbook: blackbox_exporter4monitoring-servers.yml
+
+- name: Setup node_exporter
+  import_playbook: node_exporter4monitoring-servers.yml
+

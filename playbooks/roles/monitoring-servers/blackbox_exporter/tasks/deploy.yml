@@ -1,0 +1,22 @@
+---
+
+- name: Create blackbox_exporter.yml
+  template:
+    src: "blackbox_exporter.yml.j2"
+    dest: "/etc/prometheus/blackbox_exporter.yml"
+
+- name: Execute chown blackbox_exporter.yml
+  shell: |
+    chown root:prometheus /etc/prometheus/blackbox_exporter.yml
+
+- name: Create blackbox_exporter.service
+  template:
+    src: "blackbox_exporter.service.j2"
+    dest: "/etc/systemd/system/blackbox_exporter.service"
+
+- name: Deploy blackbox_exporter
+  shell: |
+    systemctl daemon-reload
+    systemctl enable  blackbox_exporter.service
+    systemctl restart blackbox_exporter.service
+

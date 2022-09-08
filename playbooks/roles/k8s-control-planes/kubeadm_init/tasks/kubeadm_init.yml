@@ -1,0 +1,31 @@
+---
+
+- name: Create kubeadm-config.yaml
+  become: no
+  template:
+    src: "kubeadm-config.yaml.j2"
+    dest: "./kubeadm-config.yaml"
+
+- name: Execute "kubeadm init"
+  shell: kubeadm init --config ./kubeadm-config.yaml --upload-certs
+
+- name: Create $HOME/.kube directory
+  file:
+    path: "/home/{{ ansible_env.SUDO_USER }}/.kube/"
+    state: directory
+    mode: '0755'
+    owner: "{{ ansible_env.SUDO_USER }}"
+    group: "{{ ansible_env.SUDO_USER }}"
+
+- name: Copy admin.conf to $HOME/.kube/config
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "/home/{{ ansible_env.SUDO_USER }}/.kube/config"
+    owner: "{{ ansible_env.SUDO_USER }}"
+    group: "{{ ansible_env.SUDO_USER }}"
+    mode: '0600'
+    remote_src: true
+
+- name: Execute rm kubeadm-config.yaml
+  become: no
+  shell: rm ./kubeadm-config.yaml

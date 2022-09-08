@@ -1,0 +1,13 @@
+---
+
+- name: Download consule
+  get_url:
+    url: https://releases.hashicorp.com/consul/{{ Consul.Version }}/consul_{{ Consul.Version }}_linux_arm64.zip
+    dest: /tmp
+
+- name: Install consule
+  unarchive:
+    src: /tmp/consul_{{ Consul.Version }}_linux_arm64.zip
+    dest: /usr/local/bin
+    remote_src: yes
+

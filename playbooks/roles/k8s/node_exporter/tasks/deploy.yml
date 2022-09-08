@@ -1,0 +1,13 @@
+---
+
+- name: Create node_exporter.service
+  template:
+    src: "node_exporter.service.j2"
+    dest: "/etc/systemd/system/node_exporter.service"
+
+- name: Deploy node_exporter
+  shell: |
+    systemctl daemon-reload
+    systemctl enable node_exporter.service
+    systemctl start  node_exporter.service
+

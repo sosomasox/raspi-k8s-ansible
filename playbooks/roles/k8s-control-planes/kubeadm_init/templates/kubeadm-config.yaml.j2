@@ -1,0 +1,39 @@
+---
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: ClusterConfiguration
+kubernetesVersion: v{{ Kubernetes.Version }}
+controlPlaneEndpoint: {{ LoadBalancer.Keepalived.VirtualLocalIPAddress }}:{{ LoadBalancer.BindPort }}
+apiServer:
+  extraArgs:
+    allow-privileged: "true"
+    authorization-mode: Node,RBAC
+    enable-admission-plugins: NamespaceLifecycle,LimitRanger,ServiceAccount,TaintNodesByCondition,PodSecurity,Priority,DefaultTolerationSeconds,DefaultStorageClass,StorageObjectInUseProtection,PersistentVolumeClaimResize,RuntimeClass,CertificateApproval,CertificateSigning,CertificateSubjectRestriction,DefaultIngressClass,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota
+  certSANs:
+  - "{{ LoadBalancer.Hostname }}"
+{% for control_plane in groups['k8s-control-planes'] %}
+  - "{{ control_plane }}"
+  - "{{ hostvars[control_plane]['ansible_host'] }}"
+{% endfor %}
+{% for loadbalancer in groups['k8s-loadbalancers'] %}
+  - "{{ loadbalancer }}"
+  - "{{ hostvars[loadbalancer]['ansible_host'] }}"
+{% endfor %}
+  - "{{ LoadBalancer.Keepalived.VirtualLocalIPAddress }}"
+  timeoutForControlPlane: 4m0s
+clusterName: {{ Kubernetes.ClusterName }}
+imageRepository: k8s.gcr.io
+certificatesDir: /etc/kubernetes/pki
+controllerManager:
+  extraArgs:
+    pod-eviction-timeout: 3m
+    node-monitor-grace-period: 30s
+scheduler: {}
+dns: {}
+etcd:
+  local:
+    dataDir: /var/lib/etcd
+networking:
+  dnsDomain: cluster.local
+  podSubnet: {{ Kubernetes.PodNetworkCIDR }}
+  serviceSubnet: 10.96.0.0/12
+---

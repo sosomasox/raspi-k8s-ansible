@@ -1,0 +1,14 @@
+# # config file version
+apiVersion: 1
+
+providers:
+ - name: 'Node Exporter'
+   orgId: 1
+   folder: ''
+#   folderUid: ''
+   type: file
+   allowUiUpdates: false
+   disableDeletion: false
+   options:
+     path: /var/lib/grafana/dashboards/node_exporter.json
+

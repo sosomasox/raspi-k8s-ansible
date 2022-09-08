@@ -1,0 +1,51 @@
+---
+
+- name: Create kubernetes-ca-config.json
+  become: no
+  template:
+    src: "kubernetes-ca-config.json.j2"
+    dest: "./kubernetes-ca-config.json"
+
+- name: Create prometheus-kube-apiserver-client-csr.json.j2
+  become: no
+  template:
+    src: "prometheus-kube-apiserver-client-csr.json.j2"
+    dest: "./prometheus-kube-apiserver-client-csr.json"
+
+- name: Execute cfssl gencert
+  become: yes
+  shell: |
+    cfssl gencert \
+    -ca=/etc/kubernetes/pki/ca.crt \
+    -ca-key=/etc/kubernetes/pki/ca.key \
+    -config=./kubernetes-ca-config.json \
+    -profile=kubernetes \
+    ./prometheus-kube-apiserver-client-csr.json | cfssljson -bare ./prometheus-kube-apiserver-client
+    cp /etc/kubernetes/pki/ca.crt ./
+    chown ubuntu:ubuntu \
+      ca.crt \
+      prometheus-kube-apiserver-client.pem \
+      prometheus-kube-apiserver-client-key.pem 
+
+- name: Execute scp certs
+  become: no
+  shell: |
+    scp \
+      ca.crt \
+      prometheus-kube-apiserver-client.pem \
+      prometheus-kube-apiserver-client-key.pem \
+      {{ item }}:
+  with_items:
+    - "{{ groups['monitoring-servers'] }}"
+
+- name: Clean
+  become: yes
+  shell: |
+    rm  \
+      ca.crt \
+      prometheus-kube-apiserver-client.pem \
+      prometheus-kube-apiserver-client-key.pem \
+      prometheus-kube-apiserver-client.csr \
+      kubernetes-ca-config.json \
+      prometheus-kube-apiserver-client-csr.json
+

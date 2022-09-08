@@ -1,0 +1,11 @@
+---
+
+- name: Update the package list
+  apt:
+    update_cache: "yes"
+
+- name: Install Keepalived
+  apt:
+    name:
+      - keepalived
+

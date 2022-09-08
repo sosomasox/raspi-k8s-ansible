@@ -1,0 +1,11 @@
+---
+
+- name: Deploy consul
+  become: yes
+  hosts:
+    - k8s-loadbalancers
+    - k8s-control-planes
+    - k8s-nodes
+  roles:
+    - k8s/consul
+

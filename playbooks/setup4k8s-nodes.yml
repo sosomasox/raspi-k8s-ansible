@@ -1,0 +1,9 @@
+---
+
+- name: Setup k8s-nodes
+  become: yes
+  hosts:
+    - k8s-nodes
+  roles:
+    - k8s-nodes/setup
+

@@ -1,0 +1,12 @@
+---
+
+- name: Create keepalived.conf
+  template:
+    src: "keepalived.conf.j2"
+    dest: "/etc/keepalived/keepalived.conf"
+
+- name: Create haproxy.cfg
+  template:
+    src: "haproxy.cfg.j2"
+    dest: "/etc/haproxy/haproxy.cfg"
+

@@ -1,0 +1,12 @@
+---
+
+- name: Update the package list
+  apt:
+    update_cache: "yes"
+
+- name: Install Keepalived & HAProxy packages
+  apt:
+    name:
+      - keepalived
+      - haproxy
+

@@ -1,0 +1,54 @@
+---
+
+- name: Create prometheus.yml
+  template:
+    src: "prometheus.yml.j2"
+    dest: "/tmp/prometheus.yml"
+
+- name: Create /tmp/rules directory
+  shell: |
+    mkdir -p /tmp/rules
+
+- name: Create rules
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - { src: "rules/target_down.yml.j2",       dest: "/tmp/rules/target_down.yml" }
+    - { src: "rules/blackbox_exporter.yml.j2", dest: "/tmp/rules/blackbox_exporter.yml" }
+    - { src: "rules/node_exporter.yml.j2",     dest: "/tmp/rules/node_exporter.yml" }
+
+- name: Check /tmp/prometheus.yml
+  shell: |
+    promtool check config /tmp/prometheus.yml
+
+- name: Create /etc/prometheus/rules directory
+  shell: |
+    rm -rf   /etc/prometheus/rules
+    mkdir -p /etc/prometheus/rules
+    chown -R root:prometheus /etc/prometheus/rules
+
+- name: Move prometheus.yml
+  shell: |
+    mv /tmp/prometheus.yml /etc/prometheus/prometheus.yml
+
+- name: Move rules
+  shell: |
+    mv /tmp/rules/* /etc/prometheus/rules/
+
+- name: Create prometheus.service
+  template:
+    src: "prometheus.service.j2"
+    dest: "/etc/systemd/system/prometheus.service"
+
+- name: Deploy Prometheus
+  shell: |
+    mkdir -p /var/lib/prometheus/data
+    mkdir -p /etc/prometheus/kubernetes/pki
+    chown    root:prometheus       /etc/prometheus/prometheus.yml
+    chown -R prometheus:prometheus /var/lib/prometheus/data
+    chown -R prometheus:prometheus /etc/prometheus/kubernetes/pki
+    systemctl daemon-reload
+    systemctl enable  prometheus.service
+    systemctl restart prometheus.service
+

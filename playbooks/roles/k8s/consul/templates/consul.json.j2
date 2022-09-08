@@ -1,0 +1,7 @@
+{
+  "data_dir": "/var/lib/consul/data",
+  "bind_addr": "{{ hostvars[inventory_hostname]['ansible_host'] }}",
+  "start_join": [ 
+    {% for server in groups['monitoring-servers'] %}"{{ hostvars[server]['ansible_host'] }}"{% if not loop.last %}, {% endif %}{% endfor %}
+  ]
+}

@@ -1,0 +1,9 @@
+---
+
+- name: Deploy prometheus
+  become: yes
+  hosts:
+    - monitoring-servers
+  roles:
+    - monitoring-servers/prometheus
+

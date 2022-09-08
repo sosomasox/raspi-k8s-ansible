@@ -1,0 +1,95 @@
+{% raw %}
+{{ define "__alert_severity_prefix" -}}
+    {{ if ne .Status "firing" -}}
+    :like:
+    {{- else if eq .Labels.severity "critical" -}}
+    :fire:
+    {{- else if eq .Labels.severity "warning" -}}
+    :warning:
+    {{- else if eq .Labels.severity "notice" -}}
+    :information_source:
+    {{- else -}}
+    :question:
+    {{- end }}
+{{- end }}
+
+{{ define "__alert_severity" -}}
+    {{- if eq .CommonLabels.severity "critical" -}}
+    *Severity:* `Critical`
+    {{- else if eq .CommonLabels.severity "warning" -}}
+    *Severity:* `Warning`
+    {{- else if eq .CommonLabels.severity "notice" -}}
+    *Severity:* `Notice`
+    {{- else -}}
+    *Severity:* :question: {{ .CommonLabels.severity }}
+    {{- end }}
+{{- end }}
+
+{{ define "__alert_severity_prefix_title" -}}
+    {{ if ne .Status "firing" -}}
+    :like:
+    {{- else if eq .CommonLabels.severity "critical" -}}
+    :fire:
+    {{- else if eq .CommonLabels.severity "warning" -}}
+    :warning:
+    {{- else if eq .CommonLabels.severity "notice" -}}
+    :information_source:
+    {{- else -}}
+    :question:
+    {{- end }}
+{{- end }}
+
+{{/* First line of Slack alerts */}}
+{{ define "slack.home.title" -}}
+    [{{ .Status | toUpper -}}
+    {{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{- end -}}
+    ] {{ template "__alert_severity_prefix_title" . }} {{ .CommonLabels.alertname }}
+{{- end }}
+
+{{/* Color of Slack attachment (appears as line next to alert )*/}}
+{{ define "slack.home.color" -}}
+    {{ if eq .Status "firing" -}}
+        {{ if eq .CommonLabels.severity "warning" -}}
+            warning
+        {{- else if eq .CommonLabels.severity "critical" -}}
+            danger
+        {{- else -}}
+            #439FE0
+        {{- end -}}
+    {{ else -}}
+    good
+    {{- end }}
+{{- end }}
+
+{{/* Emoji to display as user icon (custom emoji supported!) */}}
+{{ define "slack.home.icon_emoji" }}:prometheus:{{ end }}
+
+{{/* The test to display in the alert */}}
+{{ define "slack.home.text" -}}
+    {{ template "__alert_severity" . }}
+    {{- if (index .Alerts 0).Annotations.summary }}
+    {{- "\n" -}}
+    *Summary:* {{ (index .Alerts 0).Annotations.summary }}
+    {{- end }}
+    {{ range .Alerts }}
+        {{- if .Annotations.description }}
+        {{- "\n" -}}
+        {{ if and (eq .Status "resolved") (.Annotations.description_recovery) }}{{ .Annotations.description_recovery }}{{else}}{{ .Annotations.description }}{{end}}
+        {{- "\n" -}}
+        {{- end }}
+        {{- if .Annotations.message }}
+        {{- "\n" -}}
+        {{ .Annotations.message }}
+        {{- "\n" -}}
+        {{- end }}
+    {{- end }}
+{{- end }}
+
+{{ define "slack.home.link_button_text" -}}
+    {{- if .CommonAnnotations.link_text -}}
+        {{- .CommonAnnotations.link_text -}}
+    {{- else -}}
+        Link
+    {{- end }} :link:
+{{- end }}
+{% endraw %}

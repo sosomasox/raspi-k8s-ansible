@@ -1,0 +1,4 @@
+---
+
+- include: kubeadm_join.yml
+

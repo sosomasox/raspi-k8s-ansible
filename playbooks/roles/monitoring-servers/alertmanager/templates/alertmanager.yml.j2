@@ -1,0 +1,47 @@
+global:
+  resolve_timeout: 5m
+route:
+  receiver: 'slack'
+  group_by:
+  - alertname
+  - instance
+  - severity
+  group_interval: 1m
+  repeat_interval: 1h
+  routes:
+  - receiver: 'slack'
+    continue: true
+receivers:
+- name: 'slack'
+  slack_configs:
+  - api_url: {{ Slack.Alert.WebhookURL }}
+    send_resolved: true
+    color: '{{ '{{' }} template "slack.home.color" . {{ '}}' }}'
+    title: '{{ '{{' }} template "slack.home.title" . {{ '}}' }}'
+    icon_emoji: '{{ '{{' }} template "slack.home.icon_emoji" . {{ '}}' }}'
+    text: '{{ '{{' }} template "slack.home.text" . {{ '}}' }}'
+    actions:
+    - type: button
+      text: 'Query :mag:'
+      url: '{{ '{{' }} template "__alert_generator_url" . {{ '}}' }}'
+    - type: button
+      text: 'Dashboard :grafana:'
+      url: '{{ '{{' }} (index .Alerts 0).Annotations.dashboard {{ '}}' }}'
+    - type: button
+      text: 'Silence :no_bell:'
+      url: '{{ '{{' }} template "__alert_silence_link" . {{ '}}' }}'
+    - type: button
+      text: 'Document :link:'
+      url: '{{ '{{' }} .CommonAnnotations.link {{ '}}' }}'
+inhibit_rules:
+- source_match:
+    severity: 'critical'
+  target_match:
+    severity: 'warning'
+  equal:
+  - 'alertname'
+  - 'dev'
+  - 'instance'
+templates:
+- '/etc/prometheus/alertmanager/slack_templates.tmpl'
+- '/etc/prometheus/alertmanager/slack_template_url.tmpl'

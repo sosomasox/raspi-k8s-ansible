@@ -1,0 +1,9 @@
+---
+
+- name: Setup k8s-loadbalancers
+  become: yes
+  hosts:
+    - k8s-loadbalancers
+  roles:
+    - k8s-loadbalancers/setup
+

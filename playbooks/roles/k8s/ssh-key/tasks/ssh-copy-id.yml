@@ -1,0 +1,8 @@
+---
+
+- name: Execute ssh-copy-id
+  shell: |
+    sshpass -p {{ password }} ssh-copy-id {{ item }} -o StrictHostKeyChecking=no
+  with_items:
+    - "{{ groups['monitoring-servers'] }}"
+

@@ -1,0 +1,15 @@
+---
+
+- name: Execute groupadd
+  group:
+    name: consul
+    state: present
+
+- name: Execute useradd
+  user:
+    name: consul
+    group: consul
+    shell: /bin/false
+    create_home: yes
+    home: /var/lib/consul
+

@@ -1,0 +1,15 @@
+---
+
+- name: Execute groupadd
+  group:
+    name: prometheus
+    state: present
+
+- name: Execute useradd
+  user:
+    name: prometheus
+    group: prometheus
+    shell: /bin/false
+    create_home: yes
+    home: /var/lib/prometheus
+

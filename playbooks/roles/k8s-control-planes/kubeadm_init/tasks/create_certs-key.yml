@@ -1,0 +1,6 @@
+---
+
+- name: Create certs key
+  shell: kubeadm init phase upload-certs --upload-certs
+  register: cert_key
+
