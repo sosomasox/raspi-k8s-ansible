@@ -131,7 +131,7 @@ scrape_configs:
   - job_name: traefik/metrics
     scrape_interval: 5s
     metrics_path: /metrics
-    scheme: https
+    scheme: http
     static_configs:
       - targets:
         - "traefik.home.arpa"

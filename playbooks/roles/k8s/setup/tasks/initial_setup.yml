@@ -1,9 +1,8 @@
 ---
 
 - name: Set hostname
-  become: yes
-  shell:
-    hostnamectl set-hostname {{ inventory_hostname }}
+  hostname:
+    name: "{{ inventory_hostname }}"
 
 - name: Set timezone
   shell:
