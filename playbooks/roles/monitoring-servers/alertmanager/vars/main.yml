@@ -1,0 +1,4 @@
+---
+
+slack_webhook_url: "{{ lookup('env', 'SlackWebhookURL4Alert') }}"
+

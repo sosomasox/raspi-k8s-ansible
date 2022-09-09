@@ -14,7 +14,7 @@ route:
 receivers:
 - name: 'slack'
   slack_configs:
-  - api_url: {{ Slack.Alert.WebhookURL }}
+  - api_url: {{ slack_webhook_url }}
     send_resolved: true
     color: '{{ '{{' }} template "slack.home.color" . {{ '}}' }}'
     title: '{{ '{{' }} template "slack.home.title" . {{ '}}' }}'

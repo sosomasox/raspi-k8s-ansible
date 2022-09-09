@@ -1,11 +1,11 @@
 ---
 
 - name: Set hostname
-  hostname:
-    name: "{{ inventory_hostname }}"
+  shell: |
+    hostnamectl set-hostname {{ inventory_hostname }}
 
 - name: Set timezone
-  shell:
+  shell: |
     timedatectl set-timezone Asia/Tokyo
 
 - name: Update the package list

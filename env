@@ -1,2 +1,3 @@
 # サーバのパスワード
 export PASSWORD=""
+export SlackWebhookURL4Alert=""

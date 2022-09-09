@@ -79,3 +79,16 @@ $ ansible-playbook --ask-become-pass \
   -i inventroies/multi-control-plane playbooks/prometheus4monitoring-servers.yml \
   --start-at-task="Create prometheus.yml"
 ```
+
+&nbsp;
+
+
+
+## Alertmanagerの設定ファイルを更新したい場合
+
+```
+$ ansible-playbook --ask-become-pass \
+  -i inventroies/multi-control-plane playbooks/alertmanager4monitoring-servers.yml \
+  --start-at-task="Create alertmanager.yml"
+```
+
