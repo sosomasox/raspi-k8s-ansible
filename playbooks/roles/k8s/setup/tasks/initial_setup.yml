@@ -1,6 +1,7 @@
 ---
 
 - name: Set hostname
+  become: yes
   shell:
     hostnamectl set-hostname {{ inventory_hostname }}
 

@@ -1,0 +1,18 @@
+---
+
+- name: Create LVM
+  become: yes
+  shell: |
+    pvcreate /dev/sda3
+    vgcreate vg /dev/sda3
+    lvcreate -y -L 128Gi vg -n longhorn
+    mkdir -p /var/lib/longhorn
+    mkfs.xfs -f -L longhorn /dev/vg/longhorn
+    mount -t xfs /dev/vg/longhorn /var/lib/longhorn
+
+- name: Edit /etc/fstab
+  become: yes
+  lineinfile:
+    path: /etc/fstab
+    line: "LABEL=longhorn    /var/lib/longhorn xfs  defaults  0 2"
+

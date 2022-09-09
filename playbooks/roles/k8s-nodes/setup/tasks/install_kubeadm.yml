@@ -37,6 +37,8 @@
       - apt-transport-https
       - curl
       - lvm2
+      - open-iscsi
+      - nfs-common
 
 - name: Configure update-alternatives
   shell: |

@@ -25,8 +25,9 @@ imageRepository: k8s.gcr.io
 certificatesDir: /etc/kubernetes/pki
 controllerManager:
   extraArgs:
-    pod-eviction-timeout: 3m
-    node-monitor-grace-period: 30s
+    pod-eviction-timeout: 15s
+    node-monitor-period: 3s
+    node-monitor-grace-period: 15s
 scheduler: {}
 dns: {}
 etcd:
