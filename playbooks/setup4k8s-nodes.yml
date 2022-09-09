@@ -7,3 +7,5 @@
   roles:
     - k8s-nodes/setup
 
+- name: Create LVM on k8s-nodes
+  import_playbook: create_lvm4k8s-nodes.yml
