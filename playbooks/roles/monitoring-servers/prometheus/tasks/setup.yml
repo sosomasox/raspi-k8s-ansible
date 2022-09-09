@@ -1,5 +1,22 @@
 ---
 
+- name: Create LVM
+  ignore_errors: yes
+  become: yes
+  shell: |
+    pvcreate /dev/sda3
+    vgcreate vg /dev/sda3
+    lvcreate -y -L 128Gi vg -n prometheus
+    mkdir -p /var/lib/prometheus
+    mkfs.xfs -f -L prometheus /dev/vg/prometheus
+    mount -t xfs /dev/vg/prometheus /var/lib/prometheus
+
+- name: Edit /etc/fstab
+  become: yes
+  lineinfile:
+    path: /etc/fstab
+    line: "LABEL=prometheus    /var/lib/prometheus xfs  defaults  0 2"
+
 - name: Execute groupadd
   group:
     name: prometheus
