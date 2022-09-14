@@ -15,7 +15,7 @@
   become: yes
   lineinfile:
     path: /etc/fstab
-    line: "LABEL=prometheus    /var/lib/prometheus xfs  defaults  0 2"
+    line: "LABEL=prometheus /var/lib/prometheus xfs defaults 0 2"
 
 - name: Execute groupadd
   group:
