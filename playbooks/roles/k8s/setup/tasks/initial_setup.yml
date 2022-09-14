@@ -4,6 +4,11 @@
   shell: |
     hostnamectl set-hostname {{ inventory_hostname }}
 
+- name: Edit /etc/crontab
+  lineinfile:
+    path: /etc/crontab
+    line: "@reboot hostnamectl set-hostname {{ inventory_hostname }}"
+
 - name: Set timezone
   shell:
     timedatectl set-timezone Asia/Tokyo
