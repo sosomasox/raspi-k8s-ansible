@@ -2,7 +2,7 @@
 
 - name: Create blackbox_exporter.yml
   template:
-    src: "blackbox_exporter.yml.j2"
+    src: "blackbox_exporter.yml"
     dest: "/etc/prometheus/blackbox_exporter.yml"
 
 - name: Execute chown blackbox_exporter.yml
@@ -11,7 +11,7 @@
 
 - name: Create blackbox_exporter.service
   template:
-    src: "blackbox_exporter.service.j2"
+    src: "blackbox_exporter.service"
     dest: "/etc/systemd/system/blackbox_exporter.service"
 
 - name: Deploy blackbox_exporter

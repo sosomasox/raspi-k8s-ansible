@@ -2,7 +2,7 @@
 
 - name: Create node_exporter.service
   template:
-    src: "node_exporter.service.j2"
+    src: "node_exporter.service"
     dest: "/etc/systemd/system/node_exporter.service"
 
 - name: Deploy node_exporter

@@ -128,6 +128,7 @@ scrape_configs:
       - target_label: __address__
         replacement: {{ inventory_hostname }}:9115
 
+
   - job_name: traefik/metrics
     scrape_interval: 5s
     metrics_path: /metrics

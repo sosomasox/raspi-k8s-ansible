@@ -38,7 +38,7 @@
 
 - name: Create prometheus.service
   template:
-    src: "prometheus.service.j2"
+    src: "prometheus.service"
     dest: "/etc/systemd/system/prometheus.service"
 
 - name: Deploy Prometheus
