@@ -30,21 +30,21 @@ $ source .env
 ### 1. 監視サーバのセットアップ
 
 ```
-$ ansible-playbook --ask-become-pass -i inventroies/single-control-plane playbooks/setup4monitoring-servers.yml
+$ ansible-playbook --ask-become-pass -i inventories/single-control-plane playbooks/setup4monitoring-servers.yml
 ```
 
 
 ### 2. Kubernetesクラスタを構成する各サーバのセットアップ
 
 ```
-$ ansible-playbook --ask-become-pass -i inventroies/single-control-plane playbooks/setup4k8s.yml
+$ ansible-playbook --ask-become-pass -i inventories/single-control-plane playbooks/setup4k8s.yml
 ```
 
 
 ### 3. kubeadmによるkubernetesクラスタの構築
 
 ```
-$ ansible-playbook --ask-become-pass -i inventroies/single-control-plane playbooks/deploy4k8s.yml
+$ ansible-playbook --ask-become-pass -i inventories/single-control-plane playbooks/deploy4k8s.yml
 ```
 
 
@@ -76,7 +76,7 @@ Prometheusの設定ファイル `playbooks/roles/monitoring-servers/prometheus/t
 
 ```
 $ ansible-playbook --ask-become-pass \
-  -i inventroies/single-control-plane playbooks/prometheus4monitoring-servers.yml \
+  -i inventories/single-control-plane playbooks/prometheus4monitoring-servers.yml \
   --start-at-task="Create prometheus.yml"
 ```
 
@@ -88,7 +88,7 @@ $ ansible-playbook --ask-become-pass \
 
 ```
 $ ansible-playbook --ask-become-pass \
-  -i inventroies/single-control-plane playbooks/alertmanager4monitoring-servers.yml \
+  -i inventories/single-control-plane playbooks/alertmanager4monitoring-servers.yml \
   --start-at-task="Create alertmanager.yml"
 ```
 

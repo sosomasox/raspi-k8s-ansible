@@ -1,0 +1,28 @@
+monitoring-servers:
+  hosts:
+    monitoring-a.home.arpa:
+      ansible_host: 192.168.111.1
+k8s-loadbalancers:
+  hosts:
+    raspi-k8s-control-plane-1.home.arpa:
+      ansible_host: 192.168.114.1
+    raspi-k8s-control-plane-2.home.arpa:
+      ansible_host: 192.168.114.2
+    raspi-k8s-control-plane-3.home.arpa:
+      ansible_host: 192.168.114.3
+k8s-control-planes:
+  hosts:
+    raspi-k8s-control-plane-1.home.arpa:
+      ansible_host: 192.168.114.1
+    raspi-k8s-control-plane-2.home.arpa:
+      ansible_host: 192.168.114.2
+    raspi-k8s-control-plane-3.home.arpa:
+      ansible_host: 192.168.114.3
+k8s-nodes:
+  hosts:
+    raspi-k8s-node-1.home.arpa:
+      ansible_host: 192.168.114.11
+    raspi-k8s-node-2.home.arpa:
+      ansible_host: 192.168.114.12
+    raspi-k8s-node-3.home.arpa:
+      ansible_host: 192.168.114.13
