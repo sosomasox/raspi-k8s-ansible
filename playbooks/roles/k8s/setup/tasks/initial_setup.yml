@@ -7,7 +7,7 @@
 - name: Edit /etc/crontab
   lineinfile:
     path: /etc/crontab
-    line: "@reboot hostnamectl set-hostname {{ inventory_hostname }}"
+    line: "@reboot sudo hostnamectl set-hostname {{ inventory_hostname }}"
 
 - name: Set timezone
   shell:

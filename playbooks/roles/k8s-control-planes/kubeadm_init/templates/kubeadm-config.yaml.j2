@@ -8,7 +8,7 @@ apiServer:
     allow-privileged: "true"
     authorization-mode: Node,RBAC
     enable-admission-plugins: NamespaceLifecycle,LimitRanger,ServiceAccount,TaintNodesByCondition,PodSecurity,Priority,DefaultTolerationSeconds,DefaultStorageClass,StorageObjectInUseProtection,PersistentVolumeClaimResize,RuntimeClass,CertificateApproval,CertificateSigning,CertificateSubjectRestriction,DefaultIngressClass,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota
-    feature-gates: NodeOutOfServiceVolumeDetach=true
+    feature-gates: NodeOutOfServiceVolumeDetach=true,ReadWriteOncePod=true
   certSANs:
   - "{{ LoadBalancer.Hostname }}"
 {% for control_plane in groups['k8s-control-planes'] %}
@@ -32,7 +32,7 @@ controllerManager:
     feature-gates: NodeOutOfServiceVolumeDetach=true
 scheduler:
   extraArgs:
-    feature-gates: NodeOutOfServiceVolumeDetach=true
+    feature-gates: NodeOutOfServiceVolumeDetach=true,ReadWriteOncePod=true
 dns: {}
 etcd:
   local:
@@ -45,6 +45,7 @@ networking:
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
 featureGates:
+  ReadWriteOncePod: true
   NodeOutOfServiceVolumeDetach: true
 ---
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
