@@ -3,7 +3,7 @@ groups:
     rules:
       - alert: TargetDown
         expr: up == 0
-        for: 60s
+        for: 180s
         labels:
           severity: warning
         annotations:
